@@ -13,17 +13,17 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "马文作品集",
-  description: "马文个人作品集在线浏览",
+  title: "马文-作品集15796598436",
+  description: "马文作品集",
   openGraph: {
-    title: "马文作品集",
-    description: "马文个人作品集在线浏览",
+    title: "马文-作品集15796598436",
+    description: "马文作品集",
     images: ["/og.jpg"],
   },
   twitter: {
     card: "summary_large_image",
-    title: "马文作品集",
-    description: "马文个人作品集在线浏览",
+    title: "马文-作品集15796598436",
+    description: "马文作品集",
     images: ["/og.jpg"],
   },
   icons: {
