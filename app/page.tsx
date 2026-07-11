@@ -1,15 +1,15 @@
 const portfolioSlices = [
-  { src: "/portfolio-slices/slice-01.webp", height: 2600 },
-  { src: "/portfolio-slices/slice-02.webp", height: 2600 },
-  { src: "/portfolio-slices/slice-03.webp", height: 2600 },
-  { src: "/portfolio-slices/slice-04.webp", height: 2600 },
-  { src: "/portfolio-slices/slice-05.webp", height: 2600 },
-  { src: "/portfolio-slices/slice-06.webp", height: 2600 },
-  { src: "/portfolio-slices/slice-07.webp", height: 2600 },
-  { src: "/portfolio-slices/slice-08.webp", height: 2600 },
-  { src: "/portfolio-slices/slice-09.webp", height: 2600 },
-  { src: "/portfolio-slices/slice-10.webp", height: 2600 },
-  { src: "/portfolio-slices/slice-11.webp", height: 1443 },
+  { name: "slice-01", height: 2600 },
+  { name: "slice-02", height: 2600 },
+  { name: "slice-03", height: 2600 },
+  { name: "slice-04", height: 2600 },
+  { name: "slice-05", height: 2600 },
+  { name: "slice-06", height: 2600 },
+  { name: "slice-07", height: 2600 },
+  { name: "slice-08", height: 2600 },
+  { name: "slice-09", height: 2600 },
+  { name: "slice-10", height: 2600 },
+  { name: "slice-11", height: 1443 },
 ];
 
 export const metadata = {
@@ -22,9 +22,11 @@ export default function Home() {
     <main className="portfolio-page" aria-label="马文作品集">
       {portfolioSlices.map((slice, index) => (
         <img
-          key={slice.src}
+          key={slice.name}
           className="portfolio-image"
-          src={slice.src}
+          src={`/portfolio-slices/${slice.name}-960.webp`}
+          srcSet={`/portfolio-slices/${slice.name}-960.webp 960w, /portfolio-slices/${slice.name}-1440.webp 1440w, /portfolio-slices/${slice.name}-1920.webp 1920w`}
+          sizes="(min-width: 1920px) 1920px, 100vw"
           alt=""
           width="1920"
           height={slice.height}
