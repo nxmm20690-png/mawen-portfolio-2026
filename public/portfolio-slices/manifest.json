@@ -1,0 +1,68 @@
+[
+  {
+    "src": "/portfolio-slices/slice-01.webp",
+    "width": 1920,
+    "height": 2600,
+    "size": 413352
+  },
+  {
+    "src": "/portfolio-slices/slice-02.webp",
+    "width": 1920,
+    "height": 2600,
+    "size": 460540
+  },
+  {
+    "src": "/portfolio-slices/slice-03.webp",
+    "width": 1920,
+    "height": 2600,
+    "size": 614772
+  },
+  {
+    "src": "/portfolio-slices/slice-04.webp",
+    "width": 1920,
+    "height": 2600,
+    "size": 322414
+  },
+  {
+    "src": "/portfolio-slices/slice-05.webp",
+    "width": 1920,
+    "height": 2600,
+    "size": 321934
+  },
+  {
+    "src": "/portfolio-slices/slice-06.webp",
+    "width": 1920,
+    "height": 2600,
+    "size": 295658
+  },
+  {
+    "src": "/portfolio-slices/slice-07.webp",
+    "width": 1920,
+    "height": 2600,
+    "size": 423254
+  },
+  {
+    "src": "/portfolio-slices/slice-08.webp",
+    "width": 1920,
+    "height": 2600,
+    "size": 340902
+  },
+  {
+    "src": "/portfolio-slices/slice-09.webp",
+    "width": 1920,
+    "height": 2600,
+    "size": 311670
+  },
+  {
+    "src": "/portfolio-slices/slice-10.webp",
+    "width": 1920,
+    "height": 2600,
+    "size": 264788
+  },
+  {
+    "src": "/portfolio-slices/slice-11.webp",
+    "width": 1920,
+    "height": 1443,
+    "size": 90770
+  }
+]
