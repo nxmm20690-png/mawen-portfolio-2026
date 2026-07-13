@@ -115,8 +115,8 @@ function KVCircularRow({ images, rowIndex }: { images: string[]; rowIndex: numbe
     <div
       className={`kv-circular-row kv-circular-row-${rowIndex + 1}${dragging ? " is-dragging" : ""}`}
       ref={rowRef}
-      onPointerEnter={() => {
-        dragRef.current.hovering = true;
+      onPointerEnter={(event) => {
+        if (event.pointerType === "mouse") dragRef.current.hovering = true;
       }}
       onPointerDown={onPointerDown}
       onPointerMove={onPointerMove}
@@ -124,7 +124,7 @@ function KVCircularRow({ images, rowIndex }: { images: string[]; rowIndex: numbe
       onPointerCancel={stopDrag}
       onPointerLeave={(event) => {
         if (dragRef.current.active) stopDrag(event);
-        dragRef.current.hovering = false;
+        if (event.pointerType === "mouse") dragRef.current.hovering = false;
       }}
       onClickCapture={onClickCapture}
     >

@@ -23,7 +23,9 @@ export default function DeferredImage({ src, alt, className }: DeferredImageProp
         setShouldLoad(true);
         observer.disconnect();
       },
-      { rootMargin: "700px 0px" }
+      // Start the original image while the visitor is still reading the
+      // preceding module, so high-resolution work is ready on arrival.
+      { rootMargin: "1800px 0px" }
     );
 
     observer.observe(image);
