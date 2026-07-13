@@ -24,9 +24,88 @@ export default function KVCircularRows({ images }: KVCircularRowsProps) {
 function KVCircularRow({ images, rowIndex }: { images: string[]; rowIndex: number }) {
   const rowRef = useRef<HTMLDivElement | null>(null);
   const dragRef = useRef({ active: false, hovering: false, startX: 0, scrollLeft: 0, moved: false });
+  const isTouchViewportRef = useRef(false);
   const [dragging, setDragging] = useState(false);
   const doubledImages = useMemo(() => [...images, ...images], [images]);
   const direction = rowIndex === 1 ? -1 : 1;
+
+  useEffect(() => {
+    const row = rowRef.current;
+    if (!row) return;
+
+    const media = window.matchMedia("(hover: none) and (pointer: coarse)");
+    let attached = false;
+
+    let startX = 0;
+    let startY = 0;
+    let startScrollLeft = 0;
+    let draggingHorizontally = false;
+
+    const onTouchStart = (event: TouchEvent) => {
+      if (event.touches.length !== 1) return;
+      const touch = event.touches[0];
+      startX = touch.clientX;
+      startY = touch.clientY;
+      startScrollLeft = row.scrollLeft;
+      draggingHorizontally = false;
+      dragRef.current.active = true;
+      dragRef.current.hovering = false;
+      dragRef.current.moved = false;
+    };
+
+    const onTouchMove = (event: TouchEvent) => {
+      if (!dragRef.current.active || event.touches.length !== 1) return;
+      const touch = event.touches[0];
+      const deltaX = touch.clientX - startX;
+      const deltaY = touch.clientY - startY;
+
+      if (!draggingHorizontally && Math.max(Math.abs(deltaX), Math.abs(deltaY)) > 7) {
+        draggingHorizontally = Math.abs(deltaX) > Math.abs(deltaY);
+      }
+      if (!draggingHorizontally) return;
+
+      event.preventDefault();
+      dragRef.current.moved = true;
+      row.scrollLeft = startScrollLeft - deltaX;
+    };
+
+    const stopTouchDrag = () => {
+      dragRef.current.active = false;
+      draggingHorizontally = false;
+    };
+
+    const attachTouchHandlers = () => {
+      if (attached) return;
+      row.addEventListener("touchstart", onTouchStart, { passive: true });
+      row.addEventListener("touchmove", onTouchMove, { passive: false });
+      row.addEventListener("touchend", stopTouchDrag, { passive: true });
+      row.addEventListener("touchcancel", stopTouchDrag, { passive: true });
+      attached = true;
+    };
+
+    const detachTouchHandlers = () => {
+      if (!attached) return;
+      row.removeEventListener("touchstart", onTouchStart);
+      row.removeEventListener("touchmove", onTouchMove);
+      row.removeEventListener("touchend", stopTouchDrag);
+      row.removeEventListener("touchcancel", stopTouchDrag);
+      attached = false;
+    };
+
+    const syncInputMode = () => {
+      isTouchViewportRef.current = media.matches;
+      if (media.matches) attachTouchHandlers();
+      else detachTouchHandlers();
+    };
+
+    syncInputMode();
+    media.addEventListener("change", syncInputMode);
+
+    return () => {
+      media.removeEventListener("change", syncInputMode);
+      detachTouchHandlers();
+    };
+  }, []);
 
   useEffect(() => {
     const row = rowRef.current;
@@ -41,7 +120,7 @@ function KVCircularRow({ images, rowIndex }: { images: string[]; rowIndex: numbe
     const tick = () => {
       const half = row.scrollWidth / 2;
 
-      if (half > 0 && !dragRef.current.active && !dragRef.current.hovering) {
+      if (half > 0 && !isTouchViewportRef.current && !dragRef.current.active && !dragRef.current.hovering) {
         const speed = 0.7;
         row.scrollLeft += direction * speed;
         if (direction > 0 && row.scrollLeft >= half) row.scrollLeft -= half;
@@ -58,6 +137,7 @@ function KVCircularRow({ images, rowIndex }: { images: string[]; rowIndex: numbe
   }, [direction, rowIndex]);
 
   const onPointerDown = (event: React.PointerEvent<HTMLDivElement>) => {
+    if (event.pointerType === "touch") return;
     const row = rowRef.current;
     if (!row) return;
     dragRef.current = {
@@ -72,6 +152,7 @@ function KVCircularRow({ images, rowIndex }: { images: string[]; rowIndex: numbe
   };
 
   const onPointerMove = (event: React.PointerEvent<HTMLDivElement>) => {
+    if (event.pointerType === "touch") return;
     const row = rowRef.current;
     const drag = dragRef.current;
     if (!row || !drag.active) return;
@@ -81,6 +162,7 @@ function KVCircularRow({ images, rowIndex }: { images: string[]; rowIndex: numbe
   };
 
   const stopDrag = (event: React.PointerEvent<HTMLDivElement>) => {
+    if (event.pointerType === "touch") return;
     const row = rowRef.current;
     dragRef.current.active = false;
     if (row?.hasPointerCapture(event.pointerId)) row.releasePointerCapture(event.pointerId);
@@ -99,7 +181,8 @@ function KVCircularRow({ images, rowIndex }: { images: string[]; rowIndex: numbe
     <div
       className={`kv-circular-row kv-circular-row-${rowIndex + 1}${dragging ? " is-dragging" : ""}`}
       ref={rowRef}
-      onPointerEnter={() => {
+      onPointerEnter={(event) => {
+        if (event.pointerType === "touch") return;
         dragRef.current.hovering = true;
       }}
       onPointerDown={onPointerDown}
@@ -107,6 +190,7 @@ function KVCircularRow({ images, rowIndex }: { images: string[]; rowIndex: numbe
       onPointerUp={stopDrag}
       onPointerCancel={stopDrag}
       onPointerLeave={(event) => {
+        if (event.pointerType === "touch") return;
         if (dragRef.current.active) stopDrag(event);
         dragRef.current.hovering = false;
       }}

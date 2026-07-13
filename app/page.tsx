@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import DecayCard from "./components/DecayCard";
 import KVCircularRows from "./components/KVCircularRows";
 import LightRays from "./components/LightRays";
+import MobileAheadImage from "./components/MobileAheadImage";
 import SplitText from "./components/SplitText";
 
 const categories = [
@@ -371,7 +372,7 @@ export default function Home() {
                   <p>{item.tag}</p>
                   <h3>{item.title}</h3>
                   <div className="detail-media">
-                    <img src={`/portfolio-assets/detail/${item.file}`} alt={item.title} loading="lazy" />
+                    <MobileAheadImage src={`/portfolio-assets/detail/${item.file}`} alt={item.title} loading="lazy" />
                   </div>
                 </a>
               </article>
@@ -385,7 +386,7 @@ export default function Home() {
             {materialShots.map((item, index) => (
               <article className="news-card material-card" data-reveal key={item.file}>
                 <div className="news-media material-news-media">
-                  <img src={`/portfolio-assets/material/${item.file}`} alt={item.title} loading="lazy" />
+                  <MobileAheadImage src={`/portfolio-assets/material/${item.file}`} alt={item.title} loading="lazy" />
                 </div>
                 <div className="news-copy">
                   <div>

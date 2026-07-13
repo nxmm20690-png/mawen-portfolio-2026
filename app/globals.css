@@ -2133,10 +2133,14 @@ body.menu-open .menu-panel {
   }
 
   .guide-cards {
-    position: static;
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    min-height: 0;
+    display: none;
+  }
+
+  .top-shell .hero-center-nav > a.animate-blur-fade-up {
+    opacity: 1;
+    filter: none;
+    transform: none;
+    animation: none;
   }
 
   .guide-card-link {
