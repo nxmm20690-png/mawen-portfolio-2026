@@ -32,30 +32,43 @@ function KVCircularRow({ images, rowIndex }: { images: string[]; rowIndex: numbe
     const row = rowRef.current;
     if (!row) return;
 
+    let frame = 0;
+    let previousTime = performance.now();
+    let hasInitialPosition = false;
+
     const setInitialPosition = () => {
+      if (hasInitialPosition) return;
       const half = row.scrollWidth / 2;
-      if (rowIndex === 1) row.scrollLeft = half;
+      if (!half) return;
+      if (direction < 0) row.scrollLeft = half;
+      hasInitialPosition = true;
     };
 
-    const timer = window.setTimeout(setInitialPosition, 80);
-    const tick = () => {
+    const resizeObserver = new ResizeObserver(setInitialPosition);
+    resizeObserver.observe(row);
+
+    const tick = (now: number) => {
+      setInitialPosition();
       const half = row.scrollWidth / 2;
 
       if (half > 0 && !dragRef.current.active && !dragRef.current.hovering) {
-        const speed = 0.7;
+        const elapsed = Math.min(now - previousTime, 48);
+        const speed = elapsed * 0.052;
         row.scrollLeft += direction * speed;
         if (direction > 0 && row.scrollLeft >= half) row.scrollLeft -= half;
         if (direction < 0 && row.scrollLeft <= 0) row.scrollLeft += half;
       }
+      previousTime = now;
+      frame = window.requestAnimationFrame(tick);
     };
 
-    const interval = window.setInterval(tick, 16);
+    frame = window.requestAnimationFrame(tick);
 
     return () => {
-      window.clearTimeout(timer);
-      window.clearInterval(interval);
+      window.cancelAnimationFrame(frame);
+      resizeObserver.disconnect();
     };
-  }, [direction, rowIndex]);
+  }, [direction]);
 
   const onPointerDown = (event: React.PointerEvent<HTMLDivElement>) => {
     const row = rowRef.current;
@@ -76,7 +89,10 @@ function KVCircularRow({ images, rowIndex }: { images: string[]; rowIndex: numbe
     const drag = dragRef.current;
     if (!row || !drag.active) return;
     const delta = event.clientX - drag.startX;
-    if (Math.abs(delta) > 4) drag.moved = true;
+    if (Math.abs(delta) > 4) {
+      drag.moved = true;
+      event.preventDefault();
+    }
     row.scrollLeft = drag.scrollLeft - delta;
   };
 
