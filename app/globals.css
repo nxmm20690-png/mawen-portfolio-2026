@@ -2003,13 +2003,6 @@ body.menu-open .menu-panel {
 }
 
 @media (max-width: 640px) {
-  .top-shell .top-nav-link.animate-blur-fade-up {
-    opacity: 1;
-    animation: none;
-    filter: none;
-    transform: none;
-  }
-
   .site-header {
     padding: 18px;
   }
@@ -2140,7 +2133,16 @@ body.menu-open .menu-panel {
   }
 
   .guide-cards {
-    display: none;
+    position: static;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    min-height: 0;
+  }
+
+  .guide-card-link {
+    position: relative;
+    inset: auto;
+    width: min(100%, 220px);
   }
 
   .guide-link {
@@ -2172,21 +2174,5 @@ body.menu-open .menu-panel {
 
   .kv-tile img {
     max-height: none;
-  }
-
-  .kv-circular-row {
-    padding: 0 16px 8px;
-    -webkit-overflow-scrolling: touch;
-    touch-action: pan-y;
-  }
-
-  .kv-circular-track {
-    gap: 14px;
-    padding-bottom: 12px;
-  }
-
-  .kv-circular-row-2 .kv-circular-track,
-  .kv-circular-row-3 .kv-circular-track {
-    padding-left: 0;
   }
 }

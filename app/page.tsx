@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import DecayCard from "./components/DecayCard";
-import DeferredImage from "./components/DeferredImage";
 import KVCircularRows from "./components/KVCircularRows";
 import LightRays from "./components/LightRays";
 import SplitText from "./components/SplitText";
@@ -235,7 +234,7 @@ export default function Home() {
         <nav className="hero-center-nav" aria-label="顶部快捷导航">
           {heroNav.map((item, index) => (
             <a
-              className={`top-nav-link animate-blur-fade-up ${activeSection === item.href ? "is-active" : ""}`}
+              className={`animate-blur-fade-up ${activeSection === item.href ? "is-active" : ""}`}
               style={{ animationDelay: `${100 + index * 50}ms` }}
               href={item.href}
               key={item.href}
@@ -357,7 +356,7 @@ export default function Home() {
           <div className="render-masonry">
             {renderCards.map((file, index) => (
               <article className={`render-shot ${file.endsWith(".gif") ? "is-gif" : "is-static"} render-shot-${(index % 6) + 1}`} data-reveal key={file}>
-                <img src={`/portfolio-assets/render/${file}`} alt="三维渲染作品" loading="lazy" decoding="async" />
+                <img src={`/portfolio-assets/render/${file}`} alt="三维渲染作品" loading="lazy" />
               </article>
             ))}
           </div>
@@ -372,7 +371,7 @@ export default function Home() {
                   <p>{item.tag}</p>
                   <h3>{item.title}</h3>
                   <div className="detail-media">
-                    <DeferredImage src={`/portfolio-assets/detail/${item.file}`} alt={item.title} />
+                    <img src={`/portfolio-assets/detail/${item.file}`} alt={item.title} loading="lazy" />
                   </div>
                 </a>
               </article>
@@ -386,7 +385,7 @@ export default function Home() {
             {materialShots.map((item, index) => (
               <article className="news-card material-card" data-reveal key={item.file}>
                 <div className="news-media material-news-media">
-                  <DeferredImage src={`/portfolio-assets/material/${item.file}`} alt={item.title} />
+                  <img src={`/portfolio-assets/material/${item.file}`} alt={item.title} loading="lazy" />
                 </div>
                 <div className="news-copy">
                   <div>

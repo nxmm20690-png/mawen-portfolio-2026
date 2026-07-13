@@ -23,127 +23,46 @@ export default function KVCircularRows({ images }: KVCircularRowsProps) {
 
 function KVCircularRow({ images, rowIndex }: { images: string[]; rowIndex: number }) {
   const rowRef = useRef<HTMLDivElement | null>(null);
-  const trackRef = useRef<HTMLDivElement | null>(null);
-  const dragRef = useRef({ active: false, startX: 0, scrollLeft: 0, moved: false });
+  const dragRef = useRef({ active: false, hovering: false, startX: 0, scrollLeft: 0, moved: false });
   const [dragging, setDragging] = useState(false);
   const doubledImages = useMemo(() => [...images, ...images], [images]);
   const direction = rowIndex === 1 ? -1 : 1;
 
   useEffect(() => {
     const row = rowRef.current;
-    const track = trackRef.current;
-    if (!row || !track) return;
-
-    let frame = 0;
-    let previousTime = performance.now();
-    let hasInitialPosition = false;
+    if (!row) return;
 
     const setInitialPosition = () => {
-      if (hasInitialPosition) return;
-      const loopWidth = track.scrollWidth / 2;
-      if (!loopWidth) return;
-      if (direction < 0) row.scrollLeft = loopWidth;
-      hasInitialPosition = true;
+      const half = row.scrollWidth / 2;
+      if (rowIndex === 1) row.scrollLeft = half;
     };
 
-    const resizeObserver = new ResizeObserver(() => {
-      hasInitialPosition = false;
-      setInitialPosition();
-    });
-    resizeObserver.observe(track);
+    const timer = window.setTimeout(setInitialPosition, 80);
+    const tick = () => {
+      const half = row.scrollWidth / 2;
 
-    const tick = (now: number) => {
-      setInitialPosition();
-      const loopWidth = track.scrollWidth / 2;
-
-      if (loopWidth > 0 && !dragRef.current.active) {
-        const elapsed = Math.min(now - previousTime, 48);
-        const speed = elapsed * 0.052;
-        const nextPosition = row.scrollLeft + direction * speed;
-
-        row.scrollLeft = direction > 0
-          ? nextPosition >= loopWidth
-            ? nextPosition - loopWidth
-            : nextPosition
-          : nextPosition <= 0
-            ? nextPosition + loopWidth
-            : nextPosition;
+      if (half > 0 && !dragRef.current.active && !dragRef.current.hovering) {
+        const speed = 0.7;
+        row.scrollLeft += direction * speed;
+        if (direction > 0 && row.scrollLeft >= half) row.scrollLeft -= half;
+        if (direction < 0 && row.scrollLeft <= 0) row.scrollLeft += half;
       }
-      previousTime = now;
-      frame = window.requestAnimationFrame(tick);
     };
 
-    frame = window.requestAnimationFrame(tick);
+    const interval = window.setInterval(tick, 16);
 
     return () => {
-      window.cancelAnimationFrame(frame);
-      resizeObserver.disconnect();
+      window.clearTimeout(timer);
+      window.clearInterval(interval);
     };
-  }, [direction]);
-
-  useEffect(() => {
-    const row = rowRef.current;
-    if (!row || !window.matchMedia("(hover: none) and (pointer: coarse)").matches) return;
-
-    let startX = 0;
-    let startY = 0;
-    let startScrollLeft = 0;
-    let isHorizontalSwipe: boolean | null = null;
-
-    const resetTouchDrag = () => {
-      dragRef.current.active = false;
-      setDragging(false);
-    };
-
-    const onTouchStart = (event: TouchEvent) => {
-      const touch = event.touches[0];
-      if (!touch) return;
-
-      startX = touch.clientX;
-      startY = touch.clientY;
-      startScrollLeft = row.scrollLeft;
-      isHorizontalSwipe = null;
-      dragRef.current = { active: true, startX, scrollLeft: startScrollLeft, moved: false };
-      setDragging(true);
-    };
-
-    const onTouchMove = (event: TouchEvent) => {
-      const touch = event.touches[0];
-      if (!touch || !dragRef.current.active) return;
-
-      const deltaX = touch.clientX - startX;
-      const deltaY = touch.clientY - startY;
-
-      if (isHorizontalSwipe === null && Math.max(Math.abs(deltaX), Math.abs(deltaY)) > 7) {
-        isHorizontalSwipe = Math.abs(deltaX) > Math.abs(deltaY);
-      }
-
-      if (!isHorizontalSwipe) return;
-
-      event.preventDefault();
-      dragRef.current.moved = true;
-      row.scrollLeft = startScrollLeft - deltaX;
-    };
-
-    row.addEventListener("touchstart", onTouchStart, { passive: true });
-    row.addEventListener("touchmove", onTouchMove, { passive: false });
-    row.addEventListener("touchend", resetTouchDrag, { passive: true });
-    row.addEventListener("touchcancel", resetTouchDrag, { passive: true });
-
-    return () => {
-      row.removeEventListener("touchstart", onTouchStart);
-      row.removeEventListener("touchmove", onTouchMove);
-      row.removeEventListener("touchend", resetTouchDrag);
-      row.removeEventListener("touchcancel", resetTouchDrag);
-    };
-  }, []);
+  }, [direction, rowIndex]);
 
   const onPointerDown = (event: React.PointerEvent<HTMLDivElement>) => {
-    if (event.pointerType === "touch") return;
     const row = rowRef.current;
     if (!row) return;
     dragRef.current = {
       active: true,
+      hovering: dragRef.current.hovering,
       startX: event.clientX,
       scrollLeft: row.scrollLeft,
       moved: false,
@@ -153,20 +72,15 @@ function KVCircularRow({ images, rowIndex }: { images: string[]; rowIndex: numbe
   };
 
   const onPointerMove = (event: React.PointerEvent<HTMLDivElement>) => {
-    if (event.pointerType === "touch") return;
     const row = rowRef.current;
     const drag = dragRef.current;
     if (!row || !drag.active) return;
     const delta = event.clientX - drag.startX;
-    if (Math.abs(delta) > 4) {
-      drag.moved = true;
-      event.preventDefault();
-    }
+    if (Math.abs(delta) > 4) drag.moved = true;
     row.scrollLeft = drag.scrollLeft - delta;
   };
 
   const stopDrag = (event: React.PointerEvent<HTMLDivElement>) => {
-    if (event.pointerType === "touch") return;
     const row = rowRef.current;
     dragRef.current.active = false;
     if (row?.hasPointerCapture(event.pointerId)) row.releasePointerCapture(event.pointerId);
@@ -185,18 +99,20 @@ function KVCircularRow({ images, rowIndex }: { images: string[]; rowIndex: numbe
     <div
       className={`kv-circular-row kv-circular-row-${rowIndex + 1}${dragging ? " is-dragging" : ""}`}
       ref={rowRef}
+      onPointerEnter={() => {
+        dragRef.current.hovering = true;
+      }}
       onPointerDown={onPointerDown}
       onPointerMove={onPointerMove}
       onPointerUp={stopDrag}
       onPointerCancel={stopDrag}
       onPointerLeave={(event) => {
-        if (event.pointerType !== "touch") {
-          if (dragRef.current.active) stopDrag(event);
-        }
+        if (dragRef.current.active) stopDrag(event);
+        dragRef.current.hovering = false;
       }}
       onClickCapture={onClickCapture}
     >
-      <div className="kv-circular-track" ref={trackRef}>
+      <div className="kv-circular-track">
         {doubledImages.map((file, index) => (
           <a
             className="kv-circular-card"

@@ -32,10 +32,6 @@ export default function DecayCard({
     const wrap = wrapRef.current;
     if (!wrap) return;
 
-    // Touch devices do not have a cursor to drive this effect. Keeping the
-    // cards still also prevents the four-card guide from spreading apart.
-    if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
-
     const lerp = (a: number, b: number, n: number) => (1 - n) * a + n * b;
     const map = (x: number, a: number, b: number, c: number, d: number) => ((x - a) * (d - c)) / (b - a) + c;
     const distance = (x1: number, x2: number, y1: number, y2: number) => Math.hypot(x1 - x2, y1 - y2);
