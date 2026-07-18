@@ -9,6 +9,7 @@ import SplitText from "./components/SplitText";
 
 const categories = [
   { id: "kv", title: "KV视觉设计" },
+  { id: "operation", title: "运营视觉设计" },
   { id: "render", title: "三维渲染" },
   { id: "detail", title: "产品详情" },
   { id: "material", title: "平面物料" },
@@ -18,6 +19,7 @@ const heroNav = [
   { label: "个人信息", href: "#profile" },
   { label: "观看指南", href: "#guide" },
   { label: "KV视觉", href: "#kv" },
+  { label: "运营设计", href: "#operation" },
   { label: "三维渲染", href: "#render" },
   { label: "产品详情", href: "#detail" },
   { label: "平面物料", href: "#material" },
@@ -33,20 +35,27 @@ const guideItems = [
   },
   {
     part: "Part.2",
+    title: "运营视觉设计",
+    text: "公众号·小红书·朋友圈宣传KV",
+    href: "#operation",
+    image: "/portfolio-assets/guide/guide-operation.png",
+  },
+  {
+    part: "Part.3",
     title: "三维渲染设计",
     text: "三渲二·真实场景·动力学",
     href: "#render",
     image: "/portfolio-assets/guide/guide-render.png",
   },
   {
-    part: "Part.3",
+    part: "Part.4",
     title: "详情视觉设计",
     text: "策划与架构·视觉设计·交互体验与动效优化",
     href: "#detail",
     image: "/portfolio-assets/guide/guide-detail.png",
   },
   {
-    part: "Part.4",
+    part: "Part.5",
     title: "平面视觉设计",
     text: "产品手册·展会物料·品牌物料",
     href: "#material",
@@ -62,6 +71,14 @@ const workMeta = {
     tags: ["活动主视觉", "运营设计", "创意作品"],
     stat: "65+",
     statLabel: "活动首页 / KV海报 / 运营视觉",
+  },
+  operation: {
+    eyebrow: "WORKS CASE SHOWCASE",
+    title: "运营视觉设计",
+    lead: "负责公众号、小红书、私域朋友圈等多平台运营视觉输出，统一品牌调性，适配不同传播场景。",
+    tags: ["微信公众号", "小红书", "朋友圈宣传KV"],
+    stat: "0+",
+    statLabel: "小红书 / 公众号 / 朋友圈宣传KV",
   },
   render: {
     eyebrow: "WORKS CASE SHOWCASE",
@@ -108,6 +125,90 @@ const kvImages = Array.from({ length: 65 }, (_, index) => {
   const ext = [2, 14, 26].includes(index + 1) ? "png" : "jpg";
   return `kv-new-${String(index + 1).padStart(2, "0")}.${ext}`;
 });
+
+const xiaohongshuImages = [
+  "1 (1).jpeg",
+  "1 (1).jpg",
+  "1 (10).jpeg",
+  "1 (11).jpeg",
+  "1 (12).jpeg",
+  "1 (13).jpeg",
+  "1 (14).jpeg",
+  "1 (15).jpeg",
+  "1 (16).jpeg",
+  "1 (17).jpeg",
+  "1 (18).jpeg",
+  "1 (19).jpeg",
+  "1 (2).jpeg",
+  "1 (20).jpeg",
+  "1 (21).jpeg",
+  "1 (22).jpeg",
+  "1 (23).jpeg",
+  "1 (24).jpeg",
+  "1 (25).jpeg",
+  "1 (26).jpeg",
+  "1 (3).jpeg",
+  "1 (4).jpeg",
+  "1 (5).jpeg",
+  "1 (6).jpeg",
+  "1 (7).jpeg",
+  "1 (8).jpeg",
+  "1 (9).jpeg",
+];
+
+const wechatImages = ["1.png", "2.png", "3.png", "4.png", "5.png", "6.png", "7.png", "8.png"];
+
+const momentsImages = [
+  "2.10小年-商务.jpg",
+  "2.14情人节-商务.jpg",
+  "2.18雨水-商务.jpg",
+  "2.4立春-商务.jpg",
+  "VD.jpg",
+  "鼻炎 (2).jpg",
+  "鼻炎.jpg",
+  "复合钙 (2).jpg",
+  "复合钙 (3).jpg",
+  "复合钙.jpg",
+  "复合铁 (2).jpg",
+  "复合铁 (3).jpg",
+  "复合铁.jpg",
+  "复合锌 (2).jpg",
+  "复合锌 (3).jpg",
+  "复合锌.jpg",
+  "复配酶.jpg",
+  "柑橘纤维 (2).jpg",
+  "柑橘纤维.jpg",
+  "柑橘纤维-医务.jpg",
+  "海外DHA.jpg",
+  "槐米 (2).jpg",
+  "槐米.jpg",
+  "橘柑纤维-商务.jpg",
+  "橘柑纤维-医务.jpg",
+  "拉克多 (2).jpg",
+  "拉克多.jpg",
+  "罗汉果.jpg",
+  "酶.jpg",
+  "乳铁蛋白.jpg",
+  "商务DHA.jpg",
+  "神香草.jpg",
+  "实拍-VD.jpg",
+  "实拍-复配酶 (2).jpg",
+  "实拍-复配酶.jpg",
+  "实拍-柑橘纤维.jpg",
+  "实拍-果蔬铁.jpg",
+  "实拍-海藻钙.jpg",
+  "实拍-槐米.jpg",
+  "实拍-接骨木莓 (2).jpg",
+  "实拍-接骨木莓.jpg",
+  "实拍-罗汉果.jpg",
+  "实拍-神香草.jpg",
+  "实拍-益生菌.jpg",
+  "医务DHA.jpg",
+  "益生菌-商务.jpg",
+  "益生菌-医务.jpg",
+];
+
+workMeta.operation.stat = `${xiaohongshuImages.length + wechatImages.length + momentsImages.length}+`;
 
 const renderCards = [
   "render-new-01.gif",
@@ -194,7 +295,7 @@ export default function Home() {
       document.documentElement.style.setProperty("--scroll-progress", `${progress}`);
       setShowBackTop(window.scrollY > window.innerHeight * 0.82);
 
-      const sectionIds = ["profile", "guide", "kv", "render", "detail", "material"];
+      const sectionIds = ["profile", "guide", "kv", "operation", "render", "detail", "material"];
       const current = sectionIds.findLast((id) => {
         const section = document.getElementById(id);
         if (!section) return false;
@@ -288,14 +389,13 @@ export default function Home() {
               <span>微信：mw_25820</span>
               <span>邮箱：15796598436@163.com</span>
             </div>
-            <p>
-              拥有8年电商视觉设计经验，其中6年专注于母婴/儿童食品类目，积累了深厚的行业洞察与用户审美认知。
-              擅长从品牌策略出发，完成大促KV、详情页、包装及线下物料的全链路设计。
-            </p>
-            <p>
-              兼具线上视觉统筹与线下物料设计能力，擅长品牌包装、宣传海报、企业名片等物料创作，可实现线上线下视觉
-              风格统一，高效配合团队完成品牌形象塑造与市场推广工作，具备极强的执行力与协作意识。
-            </p>
+            <ol className="profile-points">
+              <li>8年电商视觉设计经验，其中6年深耕母婴/儿童食品类目，熟悉品类用户审美与合规要求，可独立完成从需求解读到落地上线的全链路设计。</li>
+              <li>以数据为导向做设计，结合点击率、转化率定期复盘迭代，形成“设计-数据-优化”闭环，持续优化视觉方案提升转化效果。</li>
+              <li>全场景设计能力覆盖：天猫/京东等电商平台全链路视觉、公众号/小程序/小红书等新媒体运营设计、线下活动全品类物料与展位视觉，同时可独立完成 C4D 产品建模渲染、短视频剪辑工作。</li>
+              <li>精通AI辅助设计工具(Midjourney、ChatGPT、即梦、NanoBanana、Gemini3)，具备AI出图、创意优化、视觉落地的能力，实现大促视觉素材全流程提效10%-30%。</li>
+            </ol>
+            <p className="profile-closing">在工作中始终保持学习热情，现寻求更具挑战性的平台，期望负责更核心的品牌项目，持续突破自身能力边界。</p>
           </div>
         </div>
       </section>
@@ -352,6 +452,42 @@ export default function Home() {
           <KVCircularRows images={kvImages} />
         </section>
 
+        <section className="work-module operation-style section-pad" id="operation">
+          <WorkHeading meta={workMeta.operation} />
+
+          <OperationSubheading index="01" title="小红书视觉" />
+          <div className="operation-masonry">
+            {xiaohongshuImages.map((file) => (
+              <article className="operation-masonry-shot" data-reveal key={file}>
+                <img src={`/portfolio-assets/operation/小红书/${file}`} alt="小红书运营视觉作品" loading="lazy" />
+              </article>
+            ))}
+          </div>
+
+          <OperationSubheading index="02" title="公众号视觉" />
+          <div className="operation-wechat-grid">
+            {wechatImages.map((file, index) => (
+              <article className="operation-wechat-card" data-reveal key={file}>
+                <div className="operation-wechat-media">
+                  <MobileAheadImage
+                    src={`/portfolio-assets/operation/公众号/${file}`}
+                    alt={`公众号运营视觉作品 ${index + 1}`}
+                    loading="lazy"
+                  />
+                </div>
+              </article>
+            ))}
+          </div>
+
+          <OperationSubheading index="03" title="朋友圈宣传KV" />
+          <KVCircularRows
+            images={momentsImages}
+            basePath="/portfolio-assets/operation/朋友圈宣传KV"
+            ariaLabel="朋友圈宣传KV横向滚动展示"
+            altPrefix="朋友圈宣传KV作品"
+          />
+        </section>
+
         <section className="work-module news-style section-pad" id="render">
           <WorkHeading meta={workMeta.render} />
           <div className="render-masonry">
@@ -367,7 +503,7 @@ export default function Home() {
           <WorkHeading meta={workMeta.detail} />
           <div className="detail-card-list">
             {detailCards.map((item) => (
-              <article className="detail-card" data-reveal key={item.title}>
+              <article className="detail-card" data-reveal key={item.file}>
                 <a href={`/portfolio-assets/detail/${item.file}`} target="_blank" rel="noreferrer">
                   <p>{item.tag}</p>
                   <h3>{item.title}</h3>
@@ -462,6 +598,15 @@ function WorkHeading({ meta }: { meta: (typeof workMeta)[keyof typeof workMeta] 
         <strong>{meta.stat}</strong>
         <p>{meta.statLabel}</p>
       </aside>
+    </div>
+  );
+}
+
+function OperationSubheading({ index, title }: { index: string; title: string }) {
+  return (
+    <div className="operation-subheading" data-reveal>
+      <span>{index}</span>
+      <h3>{title}</h3>
     </div>
   );
 }

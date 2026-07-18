@@ -4,24 +4,48 @@ import { useEffect, useMemo, useRef, useState } from "react";
 
 type KVCircularRowsProps = {
   images: string[];
+  basePath?: string;
+  ariaLabel?: string;
+  altPrefix?: string;
 };
 
-export default function KVCircularRows({ images }: KVCircularRowsProps) {
+export default function KVCircularRows({
+  images,
+  basePath = "/portfolio-assets/kv",
+  ariaLabel = "KV视觉设计作品横向滚动展示",
+  altPrefix = "KV视觉设计作品",
+}: KVCircularRowsProps) {
   const rows = useMemo(() => {
     const rowCount = 3;
     return Array.from({ length: rowCount }, (_, rowIndex) => images.filter((_, index) => index % rowCount === rowIndex));
   }, [images]);
 
   return (
-    <div className="kv-circular-stack" aria-label="KV视觉设计作品横向滚动展示">
+    <div className="kv-circular-stack" aria-label={ariaLabel}>
       {rows.map((row, rowIndex) => (
-        <KVCircularRow images={row} rowIndex={rowIndex} key={`kv-row-${rowIndex}`} />
+        <KVCircularRow
+          images={row}
+          rowIndex={rowIndex}
+          basePath={basePath}
+          altPrefix={altPrefix}
+          key={`kv-row-${rowIndex}`}
+        />
       ))}
     </div>
   );
 }
 
-function KVCircularRow({ images, rowIndex }: { images: string[]; rowIndex: number }) {
+function KVCircularRow({
+  images,
+  rowIndex,
+  basePath,
+  altPrefix,
+}: {
+  images: string[];
+  rowIndex: number;
+  basePath: string;
+  altPrefix: string;
+}) {
   const rowRef = useRef<HTMLDivElement | null>(null);
   const dragRef = useRef({ active: false, hovering: false, startX: 0, scrollLeft: 0, moved: false });
   const isTouchViewportRef = useRef(false);
@@ -200,13 +224,13 @@ function KVCircularRow({ images, rowIndex }: { images: string[]; rowIndex: numbe
         {doubledImages.map((file, index) => (
           <a
             className="kv-circular-card"
-            href={`/portfolio-assets/kv/${file}`}
+            href={`${basePath}/${file}`}
             target="_blank"
             rel="noreferrer"
             key={`${file}-${index}`}
             style={{ "--card-tilt": `${((index % 5) - 2) * 1.2}deg` } as React.CSSProperties}
           >
-            <img src={`/portfolio-assets/kv/${file}`} alt={`KV视觉设计作品 ${rowIndex * images.length + index + 1}`} loading="lazy" />
+            <img src={`${basePath}/${file}`} alt={`${altPrefix} ${rowIndex * images.length + index + 1}`} loading="lazy" />
           </a>
         ))}
       </div>
